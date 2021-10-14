@@ -1,0 +1,82 @@
+
+// config all dependencies to be added into projects
+def configDepsProject = [
+        util :      ["core","quality"],
+        project1 :  ["core","log","quality"]
+]
+
+// set subscript ( curently used only for sonar plugin )
+buildscript {
+            repositories {
+                maven {
+                    url "https://plugins.gradle.org/m2/"
+                }
+            }
+            dependencies {
+                classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
+            }
+}
+
+// default settinds and adding plugins into all sub-modules
+subprojects {
+
+        if( configDepsProject["${project.name}"].contains("core") ){
+            apply from: "$rootDir/deps/core.gradle"
+            setDefaultSettingsForJavaPlugin(project.name)
+        }
+
+        if( configDepsProject["${project.name}"].contains("log") ){
+            apply from: "$rootDir/deps/log.gradle"
+        }
+
+        if( configDepsProject["${project.name}"].contains("quality") ){
+            apply from: "$rootDir/deps/quality.gradle"
+        }
+
+}
+
+// default settings for all project has deps/core ( id "java" plugin )
+def setDefaultSettingsForJavaPlugin(nameProject){
+    project(":${nameProject}") {
+            repositories {
+                mavenLocal()
+                mavenCentral()
+            }
+
+            group="com.test"
+            sourceCompatibility=11
+            targetCompatibility=11
+
+            sourceSets {
+                main.java.srcDirs = ["src"]
+                main.resources.srcDirs = ["resource"]
+                test.java.srcDirs = ["test"]
+            }
+
+            jar {
+                if ( this.hasProperty("mainClassName")  ){
+                    manifest {
+                        attributes "Main-Class": "${this.mainClassName}"
+                    }
+                }
+                duplicatesStrategy = DuplicatesStrategy.EXCLUDE 
+                from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+            }
+    }   
+}
+
+// specific settings for 'util' module
+project("util"){
+    version="1.0.2"
+}
+
+// specific settings for 'project1' module
+project(":project1"){ 
+    mainClassName="com.test.project1.Application"
+    version="1.0.2"
+    dependencies {
+        implementation project(":util")
+    }
+}
+
+
