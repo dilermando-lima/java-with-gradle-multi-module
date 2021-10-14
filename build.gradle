@@ -21,23 +21,9 @@ buildscript {
 subprojects {
 
         if( configDepsProject["${project.name}"].contains("core") ){
+            
             apply from: "$rootDir/deps/core.gradle"
-            setDefaultSettingsForJavaPlugin(project.name)
-        }
-
-        if( configDepsProject["${project.name}"].contains("log") ){
-            apply from: "$rootDir/deps/log.gradle"
-        }
-
-        if( configDepsProject["${project.name}"].contains("quality") ){
-            apply from: "$rootDir/deps/quality.gradle"
-        }
-
-}
-
-// default settings for all project has deps/core ( id "java" plugin )
-def setDefaultSettingsForJavaPlugin(nameProject){
-    project(":${nameProject}") {
+            
             repositories {
                 mavenLocal()
                 mavenCentral()
@@ -53,17 +39,29 @@ def setDefaultSettingsForJavaPlugin(nameProject){
                 test.java.srcDirs = ["test"]
             }
 
-            jar {
-                if ( this.hasProperty("mainClassName")  ){
+            afterEvaluate{ // after got mainClassName information
+                jar {
                     manifest {
-                        attributes "Main-Class": "${this.mainClassName}"
+                        attributes "Main-Class": "${mainClassName}"
                     }
+                    duplicatesStrategy = DuplicatesStrategy.EXCLUDE 
+                    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
                 }
-                duplicatesStrategy = DuplicatesStrategy.EXCLUDE 
-                from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
             }
-    }   
+
+        }
+
+        if( configDepsProject["${project.name}"].contains("log") ){
+            apply from: "$rootDir/deps/log.gradle"
+        }
+
+        if( configDepsProject["${project.name}"].contains("quality") ){
+            apply from: "$rootDir/deps/quality.gradle"
+        }
+
+      
 }
+
 
 // specific settings for 'util' module
 project("util"){
