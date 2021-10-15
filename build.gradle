@@ -1,4 +1,7 @@
 
+// import 
+apply from: "tasks.gradle"
+
 // config all dependencies to be added into projects
 def configDepsProject = [
         util :      ["core","quality"],

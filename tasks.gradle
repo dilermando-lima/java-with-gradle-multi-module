@@ -1,0 +1,40 @@
+tasks.register("sonar-down", Exec ){ // gradle --build-file custom-task.gradle -q sonar-down
+
+    def NAME_CONTAINTER = System.getProperty("sonar.container.name")
+    def commandSonarDown = """
+        echo -e "\nStoping container $NAME_CONTAINTER..."
+        docker rm -f $NAME_CONTAINTER
+    """
+    commandLine "bash","-c", "${commandSonarDown}"
+}
+
+tasks.register("sonar-up",  Exec){ // gradle --build-file custom-task.gradle -q sonar-up
+
+    dependsOn "sonar-down"
+
+    def NAME_CONTAINTER = System.getProperty("sonar.container.name")
+    def SONARQUBE_PASS=System.getProperty("sonar.password")
+    def SONARQUBE_USER=System.getProperty("sonar.login") 
+    def SONARQUBE_HOST=System.getProperty("sonar.container.url") 
+    def SONARQUBE_PORT=System.getProperty("sonar.container.port") 
+    def URL_CHANGING_PASS="$SONARQUBE_HOST:$SONARQUBE_PORT/api/users/change_password?login=admin&previousPassword=$SONARQUBE_USER&password=$SONARQUBE_PASS"
+
+    def commandSonarUp = """
+       
+        echo -e "\nStarting container $NAME_CONTAINTER..."
+        docker run -d --name $NAME_CONTAINTER -p $SONARQUBE_PORT:9000 -p 9092:9092 sonarqube
+        echo -e "\nChanging password admin $NAME_CONTAINTER..."
+    
+        IS_SONAR_ON=NOT_200
+        while [ "\$IS_SONAR_ON" != "204" ]; do 
+            IS_SONAR_ON=\$(curl -LIsS  -u $SONARQUBE_USER:$SONARQUBE_USER -X POST "$URL_CHANGING_PASS" -o /dev/null -w '%{http_code}\n'); 
+            echo "waiting for $NAME_CONTAINTER return 204 start up: \$IS_SONAR_ON yet"
+            sleep 5
+        done;
+       
+        echo -e "\n\nThat's all ready!!! \ntry $SONARQUBE_HOST:$SONARQUBE_PORT with user '$SONARQUBE_USER' and pass '$SONARQUBE_PASS'"
+    """
+
+    commandLine "bash","-c", "${commandSonarUp}"
+
+}

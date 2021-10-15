@@ -10,6 +10,8 @@ Simple project contains multi module projects with gradle, this project save all
 .
 ├── build.gradle    # all configurations for all modules, projects and dependencies
 ├── settings.gradle # declaring modules
+├── tasks.gradle    # extra gradle tasks
+├── gradle.properties # settings to be used by gradle on tasks
 |
 |
 ├── deps            # all group of dependencies to be extend in all module
@@ -65,4 +67,10 @@ Command                           |  Description              | Comments
 `gradle build --refresh-dependencies` | Build refreshing hardly in all modules |
 `gradle test`                     |  Test all modules |
 `gradle projects`                 |  List all modules |
-`gradle :{name_module}:{task}`    | Run any task in specific module | eg. `gradle :project1:clean test` or `gradle :project1:run`
+`gradle :{name_module}:{task}`    |  Run any task in specific module | eg. `gradle :project1:clean test` or `gradle :project1:run`
+`gradle jacocoTestReport`         |  Run jacoco task in all modules for test coveraging  |  will be availabled in `{folder_modules}/build/reports/jacoco/test/html/index.html`
+`gradle sonarqube`                |  Run sonarqube task in all modules | required run container sonar up with `gradle sonar-up`
+
+
+> Obs: In other to run tasks in specific  module try `gradle :{name_module}:{task}` eg. `gradle :project1:sonarqube`
+
