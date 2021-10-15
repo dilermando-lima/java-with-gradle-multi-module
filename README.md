@@ -2,7 +2,7 @@
 
 Simple project contains multi module projects with gradle, this project save all modules configuration in `./build.gradle` ( can be delegated into all sub projects too ), all modules are declared in `/.settings.gradle`.
 
-## Libs, Framework and Pattern used
+## Libs, Framework and Pattern have been used
 
   - **java 11+:** Programing language.
   - **gradle:** Tool/DSL for building and dependency management.
