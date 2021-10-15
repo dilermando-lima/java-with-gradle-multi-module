@@ -4,13 +4,14 @@ Simple project contains multi module projects with gradle, this project save all
 
 ## Libs, Framework and Pattern used
 
-  - **java 11+** Programing language.
-  - **gradle** Tool/DSL for building and dependency management.
-  - **vscode** IDE/editor used
-  - **jacoco** Code coverage plugin
-  - **sonarqube** Code Quality plugin 
-  - **multi-module**  Pattern for organizing our project in micro projects
-  - **monorepo** Pattern for organizing all projects and modules in one repository
+  - **java 11+:** Programing language.
+  - **gradle:** Tool/DSL for building and dependency management.
+  - **vscode:** IDE/editor used
+  - **jacoco:** Code coverage plugin
+  - **sonarqube:** Code Quality plugin 
+  - **multi-module:**  Pattern for organizing our project in micro projects
+  - **monorepo:** Pattern for organizing all projects and modules in one repository
+  - **log4j2:** Library to manage logs
 
 
 ## Project's structure
