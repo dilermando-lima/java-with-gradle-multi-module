@@ -2,6 +2,15 @@
 
 Simple project contains multi module projects with gradle, this project save all modules configuration in `./build.gradle` ( can be delegated into all sub projects too ), all modules are declared in `/.settings.gradle`.
 
+## Libs, Framework and Pattern used
+
+  - **java 11+** Programing language.
+  - **gradle** Tool/DSL for building and dependency management.
+  - **vscode** IDE/editor used
+  - **jacoco** Code coverage plugin
+  - **sonarqube** Code Quality plugin 
+  - **multi-module**  Pattern for organizing our project in micro projects
+  - **monorepo** Pattern for organizing all projects and modules in one repository
 
 
 ## Project's structure
@@ -12,40 +21,31 @@ Simple project contains multi module projects with gradle, this project save all
 ├── settings.gradle # declaring modules
 ├── tasks.gradle    # extra gradle tasks
 ├── gradle.properties # settings to be used by gradle on tasks
-|
-|
+│
+│
 ├── deps            # all group of dependencies to be extend in all module
 │   ├── core.gradle
 │   ├── log.gradle
 │   └── quality.gradle
-|
-|
+│
+│
 ├── project1        # module 1 depends on module 'util'
 │   ├── resource
 │   │   └── log4j2.properties
 │   ├── src
-│   │   └── com
-│   │       └── test
-│   │           └── project1
-│   │               └── Application.java
+│   │   └── com.test.project1.Application.java
+│   │
 │   └── test
-│       └── com
-│           └── test
-│               └── project1
-│                   └── ApplicationTest.java
-|
-|
+│       └── com.test.project1.ApplicationTest.java
+│
+│
 └── util            # module 2 ( lib to be used on module 'project1')
     ├── src
-    │   └── com
-    │       └── test
-    │           └── util
-    │               └── UtilString.java
+    │   └── com.test.util.UtilString.java
+    │
     └── test
-        └── com
-            └── test
-                └── util
-                    └── UtilStringTest.java
+        └── com.test.util.UtilStringTest.java
+
 
 ```
 
